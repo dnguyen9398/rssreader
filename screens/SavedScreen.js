@@ -12,18 +12,17 @@ const SavedScreen = ({navigation, route}) => {
   const [show, setShow] = useState(false)
   const [loading, setLoading] =useState(true)
   useEffect(() => {
-    const rerender = navigation.addListener('focus',()=>{
+    const rerender = navigation.addListener('focus',(e)=>{
       getFeeds()
       return rerender
     })
-  }, [getFeeds])
+  }, [navigation])
   const getFeeds = async() =>{
     const result = await AsyncStorage.getItem('note');
     if(result!= null){
       console.log(JSON.parse(result.split()))
       setData(JSON.parse(result))
       setShow(true)
-      AsyncStorage.clear()
     }
     else{
       setShow(false)
