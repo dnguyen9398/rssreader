@@ -5,6 +5,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import { Data } from '../global/datasample';
 import { useTheme } from '@react-navigation/native';
 import { SaveFeed } from '../global/function';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ExploreScreen = ({navigation}) => {
     const [link, setLink] = useState()
@@ -22,42 +23,56 @@ const ExploreScreen = ({navigation}) => {
         )
 }
     const {colors} = useTheme()
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor:colors.background
-    },
-    buttoncategory: {
-        height: 160,
-        borderColor: 'black', 
-        flex: 1, 
-        margin: 15,
-        borderRadius: 10,
-        justifyContent:'center',
-        shadowColor: 'rgba(0,0,0, .4)', // IOS
-        shadowOffset: { height: 1, width: 1 }, // IOS
-        shadowOpacity: 1, // IOS
-        shadowRadius: 1, //IOS
-        backgroundColor: colors.card,
-        elevation: 5,
-    },
-    image:{
-        height: 160,
-        borderRadius: 10,
-        overflow:'hidden',
-        alignItems:'center',
-        justifyContent:'center'
-    },
-    topView:{
-        borderWidth: 0,
-        width:'100%',
-        height: '9%',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: colors.card
-    },
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor:colors.background
+        },
+        buttoncategory: {
+            height: 160,
+            borderColor: 'black', 
+            flex: 1, 
+            margin: 15,
+            borderRadius: 10,
+            justifyContent:'center',
+            shadowColor: 'rgba(0,0,0, .4)', // IOS
+            shadowOffset: { height: 1, width: 1 }, // IOS
+            shadowOpacity: 1, // IOS
+            shadowRadius: 1, //IOS
+            backgroundColor: colors.card,
+            elevation: 5,
+        },
+        image:{
+            height: 160,
+            borderRadius: 10,
+            overflow:'hidden',
+            alignItems:'center',
+            justifyContent:'center'
+        },
+        topView:{
+            borderWidth: 0,
+            width:'100%',
+            height: '9%',
+            justifyContent: 'center',
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: colors.card
+        },
 })
+const submitData = async() => {
+    const note = {id: Date.now()}
+    const saveData = [{
+        linkurl: link,
+        id: Date.now()
+    }]
+    console.log('data saved: '+ saveData)
+    await AsyncStorage.setItem('rss', JSON.stringify([...saveData]))
+    navigation.navigate('DetailSearch1',{
+        urlFeed: link
+    })
+
+}
     return (
         <SafeAreaView
             style={styles.container}>
@@ -68,12 +83,9 @@ const styles = StyleSheet.create({
             </View>
             <View style={{margin: 15}}>
                 <TextInput style={{backgroundColor:'silver', borderRadius: 20, paddingLeft: 20}} placeholder={'Paste URL here' }
-                    onEndEditing={()=>{navigation.navigate('DetailSearch1',{
-                        urlFeed: link
-                    })}}
+                    onEndEditing={()=>submitData()}
                     onChangeText={text => {
                         setLink(text)
-                        SaveFeed(text)
                     }}>
                 </TextInput>
             </View>

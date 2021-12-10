@@ -74,6 +74,8 @@ function SaveStack(){
                 options={{headerShown: false}}></Stack.Screen>
             <Stack.Screen name='FeedDetail' component={FeedDetail}
                 options={{headerShown: false}}></Stack.Screen>
+            <Stack.Screen name='DetailSearch1' component={DetailSearch1}
+                options={{ headerShown: false}}></Stack.Screen>
         </Stack.Navigator>
     )
 }

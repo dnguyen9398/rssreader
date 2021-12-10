@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Alert, } from 'react-native';
 import { BLACK, WHITE } from '../global/color';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import { GetFeeds } from '../global/function';
 import { useTheme } from '@react-navigation/native';
 import Loading from './Loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DetailSearch1 = ({navigation, route}) => {
   const {urlFeed} = route.params;
   const [data, setData] = useState([])
   const [dataImage, setDataImage] = useState()
   const [loading , setLoading] = useState(true)
-
+  
+  const wrongURL = async() =>{
+    navigation.goBack()
+    await AsyncStorage.removeItem('rss')
+  }
   const getFeeds = () => {
         GetFeeds(urlFeed)
           .then(res=>{
@@ -20,7 +25,13 @@ const DetailSearch1 = ({navigation, route}) => {
             setDataImage(res.image.url)
             setLoading(false)
           }).catch((err)=>{
-            console.log(err)
+            console.log('lỗi '+ err)
+            Alert.alert('Alert', 'Wrong RSS URL, please try again', [
+              {
+                text: 'OK',
+                onPress: ()=>{wrongURL()}
+              }
+            ])
           })
         }
   useEffect(() => {

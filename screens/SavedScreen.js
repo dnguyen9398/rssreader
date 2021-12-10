@@ -18,9 +18,9 @@ const SavedScreen = ({navigation, route}) => {
     })
   }, [navigation])
   const getFeeds = async() =>{
-    const result = await AsyncStorage.getItem('note');
+    const result = await AsyncStorage.getItem('rss');
     if(result!= null){
-      console.log(JSON.parse(result.split()))
+      console.log(JSON.parse(result))
       setData(JSON.parse(result))
       setShow(true)
     }
@@ -30,7 +30,7 @@ const SavedScreen = ({navigation, route}) => {
   }
   const delFeed = async() => {
     try{
-      await AsyncStorage.removeItem('note')
+      await AsyncStorage.removeItem('rss')
       getFeeds()
     }catch{
       ToastAndroid.show('Error !!', ToastAndroid.SHORT)
@@ -41,8 +41,8 @@ const SavedScreen = ({navigation, route}) => {
         <TouchableOpacity style = {styles.cardStyle}
             onPress={()=>{
                 console.log(item)
-                navigation.navigate('FeedDetail',{
-                data :  item,
+                navigation.navigate('DetailSearch1',{
+                  urlFeed: item.linkurl,
                 })}}
             onLongPress={()=>{
               Alert.alert('Delete this item', 'Do you want to delete this item ?',[
@@ -58,7 +58,7 @@ const SavedScreen = ({navigation, route}) => {
               })
             }}>
             <View style={{margin: 10, }}>
-                <Text style= {{fontSize: 14, color: colors.text, fontFamily: 'Newsreader'}}>{item.title}</Text>
+                <Text style= {{fontSize: 14, color: colors.text, fontFamily: 'Newsreader'}}>{item.linkurl}</Text>
             </View>
         </TouchableOpacity>
     )
