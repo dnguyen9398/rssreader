@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '@react-navigation/native';
 import { ToastAndroid } from 'react-native';
 import Loading from './Loading';
+import { getAllFeeds } from '../database/feedhistory';
 
 const SavedScreen = ({navigation, route}) => {
   const [data, setData] = useState([])
@@ -14,6 +15,7 @@ const SavedScreen = ({navigation, route}) => {
   useEffect(() => {
     const rerender = navigation.addListener('focus',(e)=>{
       getFeeds()
+      getAllFeeds()
       return rerender
     })
   }, [navigation])
@@ -42,7 +44,7 @@ const SavedScreen = ({navigation, route}) => {
             onPress={()=>{
                 console.log(item)
                 navigation.navigate('DetailSearch1',{
-                  urlFeed: item.linkurl,
+                  urlFeed: item.data,
                 })}}
             onLongPress={()=>{
               Alert.alert('Delete this item', 'Do you want to delete this item ?',[
@@ -58,7 +60,7 @@ const SavedScreen = ({navigation, route}) => {
               })
             }}>
             <View style={{margin: 10, }}>
-                <Text style= {{fontSize: 14, color: colors.text, fontFamily: 'Newsreader'}}>{item.linkurl}</Text>
+                <Text style= {{fontSize: 14, color: colors.text, fontFamily: 'Newsreader'}}>{item.data}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -99,7 +101,7 @@ const SavedScreen = ({navigation, route}) => {
           {
             show ?
             <FlatList 
-              data={data}
+              data={getAllFeeds()}
               keyExtractor={(item=>item.id)}
               renderItem={renderFeed}
             ></FlatList>

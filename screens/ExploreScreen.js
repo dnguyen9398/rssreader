@@ -6,6 +6,7 @@ import { Data } from '../global/datasample';
 import { useTheme } from '@react-navigation/native';
 import { SaveFeed } from '../global/function';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { addFeeds } from '../database/feedhistory';
 
 const ExploreScreen = ({navigation}) => {
     const [link, setLink] = useState()
@@ -71,7 +72,7 @@ const submitData = async() => {
     navigation.navigate('DetailSearch1',{
         urlFeed: link
     })
-
+    addFeeds(link)
 }
     return (
         <SafeAreaView
